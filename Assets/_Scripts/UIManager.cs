@@ -10,26 +10,14 @@ public class UIManager : MonoBehaviour
     private int curTop = 1;
 
     private event Action disableImage;
-    private void Start()
-    {
-        gameController.instance.clicked += disable;
-    }
-
     public void turnSwap()
     {
         ballActive();
-        curTop = 1;
     }
 
     public void disable()
     {
         setAlpha(_ballImage[curTop], .01f);
-        curTop = 0;
-    }
-
-    public void activate()
-    {
-        curTop = 1;
     }
 
     private void ballActive()
