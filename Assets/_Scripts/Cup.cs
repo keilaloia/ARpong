@@ -12,7 +12,7 @@ public class Cup : MonoBehaviour {
     private void Awake()
     {
         ogMat = GetComponent<MeshRenderer>().material;
-        Ball.BallDisable += endTurn;
+        Player.endTurn += endTurn;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -5,8 +5,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour {
 
     private Rigidbody _RB;
-    [HideInInspector]
-    public float force;
+    public float force = 0f;
 
     private Transform parent;
     private Vector3 ogPosition;
@@ -18,23 +17,24 @@ public class Ball : MonoBehaviour {
     private void Awake()
     {
         _RB = GetComponent<Rigidbody>();
-        parent = this.transform.parent;
-        ogPosition = this.transform.localPosition;
-        ogRotation = this.transform.localRotation;
+
     }
     private void OnEnable()
     {
+        parent = this.transform.parent;
+        ogPosition = this.transform.localPosition;
+        ogRotation = this.transform.localRotation;
         if (ThrowBall != null)
         {
             ThrowBall();
         }
+        _RB.AddForce(parent.transform.forward * force, ForceMode.Impulse);
         transform.parent = null;
-        _RB.AddForce(transform.forward * force, ForceMode.Impulse);
         _RB.useGravity = true;
         StartCoroutine(disable(5f));
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "cup")
         {
@@ -43,21 +43,28 @@ public class Ball : MonoBehaviour {
                 inCup();
             }
             Debug.Log("fdasfadsfasf");
+
         }
     }
 
     private IEnumerator disable(float timer)
     {
         yield return new WaitForSeconds(timer);
+        gameObject.SetActive(false);
+        yield return 0;
+
+
+    }
+
+    private void OnDisable()
+    {
+        ResetVariables();
         if (BallDisable != null)
         {
             BallDisable();
         }
-        gameObject.SetActive(false);
-        ResetVariables();
 
     }
-
     private void ResetVariables()
     {
         _RB.useGravity = false;
